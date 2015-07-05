@@ -6,7 +6,7 @@
     <setting id="m3uPathType" type="enum" label="30000" lvalues="30001|30002" default="1" />
     <setting id="m3uPath" type="file" label="30011" default="" visible="eq(-1,0)"/>
     <setting id="m3uUrl" type="text" label="30012" option="hidden" default="http://tvwin.net78.net/456c6e2d7445733340505053584e5927346d7377/lista" visible="eq(-2,1)"/>
-    <setting id="m3uCache" type="bool" label="30025" default="true" visible="eq(-3,1)"/>
+    <setting id="m3uCache" type="bool" label="30025" default="false" visible="eq(-3,1)"/>
     <setting id="startNum" type="number" label="30013" default="1" />
   </category>
 
@@ -15,9 +15,9 @@
     <setting id="sep2" label="30020" type="lsep"/>
     <setting id="epgPathType" type="enum" label="30000" lvalues="30001|30002" default="1" />
     <setting id="epgPath" type="file" label="30021" default="" visible="eq(-1,0)"/>
-    <setting id="epgUrl" type="text" label="30022" default="" visible="eq(-2,1)"/>
-    <setting id="epgCache" type="bool" label="30026" default="true" visible="eq(-3,1)"/>
-    <setting id="epgTimeShift" type="slider" label="30024" default="0" range="-12,.5,12" option="float"/>
+    <setting id="epgUrl" type="text" label="30022" option="hidden" default="http://tvwin.net78.net/745f7551712f3637515c20555726695166795439/guide.xml" visible="eq(-2,1)"/>
+    <setting id="epgCache" type="bool" label="30026" default="false" visible="eq(-3,1)"/>
+    <setting id="epgTimeShift" type="slider" label="30024" default="" range="-12,.5,12" option="float"/>
     <setting id="epgTSOverride" type="bool" label="30023" default="false"/>
   </category>
 
