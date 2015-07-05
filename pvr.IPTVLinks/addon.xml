@@ -19,6 +19,6 @@
   <extension point="xbmc.addon.metadata">
     <summary>Preconfigurado por wapito para iptv links grupo secreto</summary>
     <description>Preconfigurado para iptv links grupo secreto</description>
-    <platform>wingl windx</platform>
+    <platform>all</platform>
   </extension>
 </addon>
