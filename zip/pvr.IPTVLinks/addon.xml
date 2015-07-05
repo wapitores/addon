@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="pvr.IPTVLinks"
+  version="1.1.1"
+  name="IPTV Links"
+  provider-name="wapito">
+  <requires>
+    <c-pluff version="0.1"/>
+    <import addon="xbmc.pvr" version="1.9.2"/>
+  </requires>
+  <extension
+    point="xbmc.pvrclient"
+    library_linux="Kodi_IPTV_Simple.pvr"
+    library_osx="Kodi_IPTV_Simple.pvr"
+    library_freebsd="Kodi_IPTV_Simple.pvr"
+    library_wingl="Kodi_IPTV_Simple_win32.dll"
+    library_windx="Kodi_IPTV_Simple_win32.dll"
+    library_android="libKodi_IPTV_Simple.so" />
+  <extension point="xbmc.addon.metadata">
+    <summary>Preconfigurado por wapito para iptv links grupo secreto</summary>
+    <description>Preconfigurado para iptv links grupo secreto</description>
+    <platform>wingl windx</platform>
+  </extension>
+</addon>
