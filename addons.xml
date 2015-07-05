@@ -2,34 +2,12 @@
 <addons>
 
 
-<addon
-	id="plugin.video.tvwin" version="2.0.04" name="TvWin" provider-name="wapo colaboradores Bigotes,David,Fernando,Angel">
-	<requires>
-		<import addon="xbmc.python" version="2.1.0"/>
-        <import addon="plugin.video.youtube" version="3.0.0"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-                <platform>all</platform>
-		<summary lang="es">TvWin</summary>
-		<description lang="es">Tv online</description>
-		<description lang="es">Television online agradecimientos a los compradores para seguir dando el mejor servicio</description>
-		<description lang="es">Agradecimientos a los donadores para seguir dando el mejor servicio</description>
-		<disclaimer lang="es">partes de este addon podrían no ser legales.</disclaimer>
-		<disclaimer lang="es">partes de este addon podrían no ser legales.</disclaimer>
-		<website></website>
-		<license>GPL 2.0</license>
-		<platform>all</platform>
-		<language>en</language>
-	</extension>
-</addon>
+
 
 <addon
-  id="pvr.tvwin"
-  version="1.0.2"
-  name="Pvr TvWin"
+  id="pvr.IPTVLinks"
+  version="1.1.1"
+  name="IPTV Links"
   provider-name="wapito">
   <requires>
     <c-pluff version="0.1"/>
@@ -40,26 +18,25 @@
     library_linux="Kodi_IPTV_Simple.pvr"
     library_osx="Kodi_IPTV_Simple.pvr"
     library_freebsd="Kodi_IPTV_Simple.pvr"
-    library_wingl="TvWin_win32.dll"
-    library_windx="TvWin_win32.dll"
+    library_wingl="Kodi_IPTV_Simple_win32.dll"
+    library_windx="Kodi_IPTV_Simple_win32.dll"
     library_android="libKodi_IPTV_Simple.so" />
   <extension point="xbmc.addon.metadata">
-    <summary>prv tvwin</summary>
-		<description>tvwin</description>
-		<platform>all</platform>
-	</extension>
+    <summary>Preconfigurado por wapito para iptv links grupo secreto</summary>
+    <description>Preconfigurado para iptv links grupo secreto</description>
+    <platform>wingl windx</platform>
+  </extension>
 </addon>
 
-<addon id="repository.tvwin" name="TvWin Repository" version="1.0.2" provider-name="wapito">
-	<extension point="xbmc.addon.repository" name="tvwin Addon Repository">
-		<info compressed="false">http://raw.github.com/wapitores/tvwin.repository/master/addons.xml</info>
-		<checksum>http://raw.github.com/wapitores/tvwin.repository/master/addons.xml.md5</checksum>
-		<datadir zip="true">http://github.com/wapitores/tvwin.repository/raw/master/comprimidos</datadir>
+<addon id="repository.IPTVLinks" name="IPTVLinks Repository" version="1.1.1" provider-name="wapito">
+	<extension point="xbmc.addon.repository" name="IPTVLinks Addon Repository">
+		<info compressed="false">http://raw.github.com/wapitores/addon/master/addons.xml</info>
+		<checksum>http://raw.github.com/wapitores/addon/master/addons.xml.md5</checksum>
+		<datadir zip="true">http://github.com/wapitores/addon/raw/master/zip</datadir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary>actualizacion tvwin</summary>
-		<description>tvwin</description>
+		<summary>actualizacion IPTVLinks</summary>
+		<description>IPTVLinks</description>
 		<platform>all</platform>
 	</extension>
 </addon>
-</addons>
