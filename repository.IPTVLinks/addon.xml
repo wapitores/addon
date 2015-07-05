@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.IPTVLinks" name="IPTVLinks Repository" version="1.1.1" provider-name="wapito">
+	<extension point="xbmc.addon.repository" name="IPTVLinks Addon Repository">
+		<info compressed="false">http://raw.github.com/wapitores/tvwin.repository/master/addons.xml</info>
+		<checksum>http://raw.github.com/wapitores/tvwin.repository/master/addons.xml.md5</checksum>
+		<datadir zip="true">http://github.com/wapitores/tvwin.repository/raw/master/comprimidos</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>actualizacion IPTVLinks</summary>
+		<description>IPTVLinks</description>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+
