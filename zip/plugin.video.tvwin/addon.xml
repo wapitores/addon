@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon
+	id="plugin.video.tvwin" version="1.0.1" name="TvWin" provider-name="wapo">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+                <platform>all</platform>
+		<summary lang="es">TvWin</summary>
+		<description lang="es">Tv online</description>
+		<disclaimer lang="es">partes de este addon podrían no ser legales.</disclaimer>
+		<disclaimer lang="es">partes de este addon podrían no ser legales.</disclaimer>
+		<website></website>
+		<license>GPL 2.0</license>
+		<platform>all</platform>        
+		<language>en</language>
+	</extension>
+</addon>
