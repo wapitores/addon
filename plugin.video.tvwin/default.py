@@ -1818,12 +1818,12 @@ def playlists_m3u(params):  # Biblioteca online
     # Sustituir por una lista!!!
     for biny, ciny, diny, winy, pixy, dixy, boxy in subchannel:
         if ciny == "Television calidad estandar xtv":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user +'][/COLOR]' , url= dixy + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user +'][/COLOR]' , url= dixy + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg' , folder = True , isPlayable = False )
             params["ext"] = "TvWin"
             title = ciny
             params["title"]=title
         elif ciny == "Television calidad estandar rtv":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny , url= dixy + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny , url= dixy + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
         elif ciny == "Television calidad alta":
             plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
@@ -1842,7 +1842,7 @@ def playlists_m3u(params):  # Biblioteca online
             title = ciny
             params["title"]=title
         elif ciny == "Television Stalker rtv":
-            plugintools.add_item( action="getfile_http" , plot = ciny , title = ciny , url = dixy  + '?AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+            plugintools.add_item( action="getfile_http" , plot = ciny , title = ciny , url = dixy  + '?AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
         elif ciny == "Television internacional en contruccion":
