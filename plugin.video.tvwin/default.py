@@ -693,6 +693,7 @@ def simpletv_items(params):
                                 data = file.readline()
                                 i = i + 1
                                 continue
+		
 
                             elif url.endswith("torrent") == True:
                                   
@@ -1127,13 +1128,15 @@ def simpletv_items(params):
                                 data = file.readline()
                                 i = i + 1
                                 continue
+                            
 
                             elif url.find("http://rtvsource.webcindario.com/STALKER_PUBLIC.php?ID=") >= 0:
-                                
                                 plugintools.add_item( action = "getfile_http" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = True , isPlayable = False )
                                 data = file.readline()
                                 i = i + 1
-                                continue                             
+                                continue
+                            
+                            
                             
                             elif url.endswith("m3u8") == True:
                                 title = title.split('"')
@@ -1143,17 +1146,6 @@ def simpletv_items(params):
                                 data = file.readline()
                                 i = i + 1
                                 continue
-
-                        
-
-                            elif url.find("mediafire") >= 0:
-                                title = title.split('"')
-                                title = title[0]
-                                title = title.strip()                            
-                                plugintools.add_item( action = "cbx_reader" , title = '[COLOR white]' + title + ' [COLOR gold][Mediafire][/COLOR]', plot = plot , url = url , info_labels = datamovie , thumbnail = thumbnail , extra = show , show = show, fanart = fanart , folder = True , isPlayable = False )
-                                data = file.readline()
-                                i = i + 1
-                                continue                             
 
                             elif url.startswith("short") == True:
                                 url.replace("short:", "").strip()
@@ -1823,7 +1815,7 @@ def playlists_m3u(params):  # Biblioteca online
             title = ciny
             params["title"]=title
         elif ciny == "Television calidad estandar rtv":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny , url= dixy + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
+            plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url= dixy + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
         elif ciny == "Television calidad alta":
             plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
@@ -1842,7 +1834,7 @@ def playlists_m3u(params):  # Biblioteca online
             title = ciny
             params["title"]=title
         elif ciny == "Television Stalker rtv":
-            plugintools.add_item( action="getfile_http" , plot = ciny , title = ciny , url = dixy  + '?AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
+            plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url = dixy  + '?AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
         elif ciny == "Television internacional en contruccion":
@@ -1887,13 +1879,20 @@ def getfile_http(params):
     simpletv_items(params)
 
 def xtv(params):
-  xmlmaster = plugintools.get_setting("xmlmaster")
-  if xmlmaster == 'false':
+  xtvmaster = plugintools.get_setting("xtvmaster")
+  if xtvmaster == 'false':
    xbmc.executebuiltin("Notification(%s,%s,%i,%s)" % ('Tvwin', "Accede Primero......", 1 , art+'b.png'))
    open_settings(params)
-  if xmlmaster == 'true':
+  if xtvmaster == 'true':
    getfile_http(params)
-  
+ 
+def rtv(params):
+  rtvmaster = plugintools.get_setting("rtvmaster")
+  if rtvmaster == 'false':
+   xbmc.executebuiltin("Notification(%s,%s,%i,%s)" % ('Tvwin', "Sin clave de autorizacion.....", 1 , art+'b.png'))
+   open_settings(params)
+  if rtvmaster == 'true':
+   getfile_http(params)
 
 
 
@@ -2075,7 +2074,6 @@ def longurl(params):
 
     except:
         play(params)
-
 
 
 
