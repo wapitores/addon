@@ -1817,20 +1817,32 @@ def playlists_m3u(params):  # Biblioteca online
         elif ciny == "Television calidad estandar rtv":
             plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url= dixy + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
-        elif ciny == "Television calidad alta":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+        elif ciny == "Television calidad alta xtv":
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
-        elif ciny == "Television calidad media":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+        elif ciny == "Television calidad alta rtv":
+            plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url= dixy  + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
-        elif ciny == "Television calidad baja":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+        elif ciny == "Television calidad media xtv":
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg', folder = True , isPlayable = False )
+            title = ciny
+            params["title"]=title
+        elif ciny == "Television calidad media rtv":
+            plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url= dixy  + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
+            title = ciny
+            params["title"]=title
+        elif ciny == "Television calidad baja xtv":
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg' , folder = True , isPlayable = False )
+            title = ciny
+            params["title"]=title
+        elif ciny == "Television calidad baja rtv":
+            plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url= dixy  + '&AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
         elif ciny == "Television Stalker xtv":
-            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
         elif ciny == "Television Stalker rtv":
