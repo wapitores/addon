@@ -695,17 +695,17 @@ def simpletv_items(params):
                                 continue
 		
 
-                            elif url.endswith("torrent") == True:
+                            elif url.endswith("http://xtv-arxk.rhcloud.com/live_stalker/") == True:
                                   
                                 title_fixed = title.replace(" ", "+").strip()
                                 url = 'plugin://plugin.video.p2p-streams/?url='+url+'&mode=1&name='+title_fixed                                
-                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR gold] [Torrent][/COLOR]', url = url , plot = datamovie["Plot"], info_labels = datamovie , thumbnail = thumbnail , extra = show , show = show, fanart = fanart , folder = True , isPlayable = False )
+                                plugintools.add_item( action = "nariz" , title = '[COLOR blue][I]' + cat + ' / [/I][/COLOR]' + title  , url = url , plot = "", info_labels = "" , extra = "" , show = "" , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
                             #channel
                             else:
-                                plugintools.add_item( action = "play" , title = '[COLOR blue][I]' + cat + ' / [/I][/COLOR]' + title  , url = url , plot = "", info_labels = "" , extra = "" , show = "" , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )                                
+                                plugintools.add_item( action = "xtvexpant" , title = '[COLOR blue][I]' + cat + ' / [/I][/COLOR]' + title  , url = url , plot = "", info_labels = "" , extra = "" , show = "" , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )                                
                                 data = file.readline()
                                 i = i + 1
                                 continue
@@ -2059,33 +2059,33 @@ def parser_title(title):
     plugintools.log("title_parsed= "+title)
     return title
 
-def longurl(params):
+def xtvexpant(params):
     plugintools.log('[%s %s].longurl %s' % (addonName, addonVersion, repr(params)))
 
-    
+    # Control de modo de vista predefinido
+    show = params.get("extra")
+    if show != "":
+        plugintools.modo_vista(show)
 
     url = params.get("url")
-    
+    url_getlink = 'http://urlex.org/' +url
 
-    
+    plugintools.log("url_fixed= "+url_getlink)
 
     try:
         request_headers=[]
         request_headers.append(["User-Agent","Application-Name/3.7"])
-        body,response_headers = plugintools.read_body_and_headers(headers=request_headers)
+        body,response_headers = plugintools.read_body_and_headers(url_getlink, headers=request_headers)
         plugintools.log("data= "+body)
-
-        # <long-url><![CDATA[http://85.25.43.51:8080/DE_skycomedy?u=euorocard:p=besplatna]]></long-url>
-        # xbmc.executebuiltin("Notification(%s,%s,%i,%s)" % ('PalcoTV', "Redireccionando enlace...", 3 , art+'icon.png'))
-        longurl = plugintools.find_single_match(body, 'http://lb.iptvserver.tv:8080/redirect/(.*?)')
-        longurl = longurl.replace("<![CDATA[", "")
-        longurl = longurl.replace("]]>", "")
+        longurl = plugintools.find_single_match(body, 'target="_blank">(.*?)</a>')
+       
         plugintools.log("longURL= "+longurl)
         if longurl.startswith("http"):
             plugintools.play_resolved_url(longurl)
 
     except:
         play(params)
+
 
 
 
