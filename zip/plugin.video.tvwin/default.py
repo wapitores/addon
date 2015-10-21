@@ -1130,8 +1130,13 @@ def simpletv_items(params):
                                 continue
                             
 
-                            elif url.find("http://rtvsource.webcindario.com/STALKER_PUBLIC.php?ID=") >= 0:
-                                plugintools.add_item( action = "getfile_http" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = True , isPlayable = False )
+                            elif url.find("http://rtvsource.j.layershift.co.uk/STALKER_PUBLIC.php?") >= 0:
+                                plugintools.add_item( action = "xtvexpant" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            elif url.find("http://rtvmotel.mycloud.by/STALKER_PUBLIC.php?") >= 0:
+                                plugintools.add_item( action = "xtvexpant" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
@@ -1845,6 +1850,10 @@ def playlists_m3u(params):  # Biblioteca online
             plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
+        elif ciny == "Television stalker adultos xtv":
+            plugintools.add_item( action="xtv" , plot = ciny , title = ciny + " " +'[COLOR green]['+ xtv_user + '][/COLOR]'  , url= dixy  + xtv_user + '&k=' + xtv_pwd , thumbnail = winy , fanart = art + 'x.jpeg' , folder = True , isPlayable = False )
+            title = ciny
+            params["title"]=title
         elif ciny == "Television Stalker rtv":
             plugintools.add_item( action="rtv" , plot = ciny , title = ciny , url = dixy  + '?AUTH=' + rtv_pwd , thumbnail = winy , fanart = art + 'r.jpg' , folder = True , isPlayable = False )
             title = ciny
@@ -2060,33 +2069,19 @@ def parser_title(title):
     return title
 
 def xtvexpant(params):
-    plugintools.log('[%s %s].longurl %s' % (addonName, addonVersion, repr(params)))
-
-    # Control de modo de vista predefinido
-    show = params.get("extra")
-    if show != "":
-        plugintools.modo_vista(show)
-
+    plugintools.log('[%s %s].xtvexpant %s' % (addonName, addonVersion, repr(params)))
     url = params.get("url")
-    url_getlink = 'http://urlex.org/' +url
-
-    plugintools.log("url_fixed= "+url_getlink)
-
-    try:
-        request_headers=[]
-        request_headers.append(["User-Agent","Application-Name/3.7"])
-        body,response_headers = plugintools.read_body_and_headers(url_getlink, headers=request_headers)
-        plugintools.log("data= "+body)
-        longurl = plugintools.find_single_match(body, 'target="_blank">(.*?)</a>')
-       
-        plugintools.log("longURL= "+longurl)
-        if longurl.startswith("http"):
-            plugintools.play_resolved_url(longurl)
-
-    except:
-        play(params)
-
-
+    url_getlink = 'http://wheredoesthislinkgo.com'
+    plugintools.log("url_getlink= "+url_getlink)
+    post = 'ShortenedUri=' + url
+    post = post.replace('&', "%26")
+    plugintools.log("post= "+post)
+    data = scrapertools.cache_page(url_getlink, post=post)
+    longurl = plugintools.find_single_match(data, 'expands to <a href="(.*?)">')
+    plugintools.log("longurl "+longurl)
+    plugintools.play_resolved_url(longurl)
+  
+    
 
 
 xtv_user= plugintools.get_setting("xtv_user")

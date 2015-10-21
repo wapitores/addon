@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon
-	id="plugin.video.tvwin" version="1.0.3" name="TvWin" provider-name="wapito">
+	id="plugin.video.tvwin" version="1.0.4" name="TvWin" provider-name="wapito">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
     </requires>
