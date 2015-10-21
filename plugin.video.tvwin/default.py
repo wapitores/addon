@@ -2076,7 +2076,7 @@ def xtvexpant(params):
     post = 'ShortenedUri=' + url
     post = post.replace('&', "%26")
     plugintools.log("post= "+post)
-    data = scrapertools.cache_page(url_getlink, post=post)
+    data,response_headers = plugintools.read_body_and_headers(url_getlink, post=post)
     longurl = plugintools.find_single_match(data, 'expands to <a href="(.*?)">')
     plugintools.log("longurl "+longurl)
     plugintools.play_resolved_url(longurl)
