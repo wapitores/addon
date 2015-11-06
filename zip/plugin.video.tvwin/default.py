@@ -26,8 +26,7 @@ from resources.tools.pelisyseries import *
 from resources.tools.seriesretro import *
 from resources.tools.vk import *
 from framescrape import *
-from resources.tools.spruto import *
-from resources.tools.verpelis import *
+
 
 addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
