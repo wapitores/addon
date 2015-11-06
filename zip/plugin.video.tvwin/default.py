@@ -26,8 +26,8 @@ from resources.tools.pelisyseries import *
 from resources.tools.seriesretro import *
 from resources.tools.vk import *
 from framescrape import *
-
-
+from resources.tools.spruto import *
+from resources.tools.verpelis import *
 
 addonName           = xbmcaddon.Addon().getAddonInfo("name")
 addonVersion        = xbmcaddon.Addon().getAddonInfo("version")
@@ -1130,17 +1130,21 @@ def simpletv_items(params):
                                 continue
                             
 
-                            elif url.find("http://rtvsource.j.layershift.co.uk/STALKER_PUBLIC.php?") >= 0:
+                            elif url.find("http://xtv") >= 0:
                                 plugintools.add_item( action = "xtvexpant" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
-                            elif url.find("http://rtvmotel.mycloud.by/STALKER_PUBLIC.php?") >= 0:
+                            elif url.find("http://rtvmotel") >= 0:
                                 plugintools.add_item( action = "xtvexpant" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
-                            
+                            elif url.find("http://wcm777") >= 0:
+                                plugintools.add_item( action = "xtvexpant" , title = title , plot = plot , url = url , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
                             
                             
                             elif url.endswith("m3u8") == True:
@@ -1195,7 +1199,7 @@ def simpletv_items(params):
                             plugintools.log("params en simpletv" +repr(params) )
                             plugintools.log("fanart= "+fanart)
                             url = params.get("url")                            
-                            plugintools.add_item( action = "launch_rtmp" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '' + server + '' , plot = plot , url = params.get("url") , info_labels = datamovie , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
+                            plugintools.add_item( action = "launch_rtmp" , title = '[COLOR blue][' + cat + '[/COLOR] ' + title  , plot = plot , url = params.get("url") , info_labels = datamovie , thumbnail = thumbnail , show = show, fanart = fanart , folder = False , isPlayable = True )
                             print url                        
                             data = file.readline()
                             i = i + 1
@@ -1882,6 +1886,14 @@ def playlists_m3u(params):  # Biblioteca online
             plugintools.add_item( action="getfile_http" , plot = ciny , title = ciny  , url= dixy , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
             title = ciny
             params["title"]=title
+        elif ciny == "Ver pelis en desarrolo":
+            plugintools.add_item( action="verpelis" , plot = ciny , title = ciny  , url= dixy , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+            title = ciny
+            params["title"]=title
+        elif ciny == "Mi Tv online":
+            plugintools.add_item( action="getfile_http" , plot = ciny , title = ciny  , url = dixy + id_pastebin , thumbnail = winy , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
+            title = ciny
+            params["title"]=title
         else:
             plot = ciny.split("[")
             plot = plot[0]
@@ -2087,7 +2099,7 @@ def xtvexpant(params):
 xtv_user= plugintools.get_setting("xtv_user")
 xtv_pwd = plugintools.get_setting("xtv_pwd")
 rtv_pwd = plugintools.get_setting("rtv_pwd")
-
+id_pastebin = plugintools.get_setting("id_pastebin")
 
 def m3u_items(title):
     plugintools.log('[%s %s].m3u_items %s' % (addonName, addonVersion, title))    
@@ -2242,8 +2254,487 @@ def m3u_items(title):
 
     return thumbnail, fanart, cat, only_title, tvgid, tvgname, imdb, duration, year, dir, writers, genre, num_votes, plot
 
+def parse_url(url):
+    # plugintools.log("url entrante= "+url)
 
+    if url != "":
+        url = url.strip()
+        url = url.replace("rtmp://$OPT:rtmp-raw=", "")
+        return url
 
+    else:
+        plugintools.log("error en url= ") 
+def server_rtmp(params):
+    plugintools.log('[%s %s].server_rtmp %s' % (addonName, addonVersion, repr(params)))
+
+    url = params.get("url")
+    plugintools.log("URL= "+url)
+
+    if url.find("iguide.to") >= 0:
+        params["server"] = 'iguide'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("freetvcast.pw") >= 0:
+        params["server"] = 'freetvcast'
+        return params
+
+    elif url.find("9stream") >= 0:
+        params["server"] = '9stream'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("freebroadcast") >= 0:
+        params["server"] = 'freebroadcast'
+        if url.find("timeout") < 0:
+            url = url + ' timeout=15'
+            params["url"]=url
+        return params
+
+    elif url.find("goodgame.ru") >= 0:
+        params["server"] = 'goodgame.ru'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("hdcast") >= 0:
+        params["server"] = 'hdcast'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("sharecast") >= 0:
+        params["server"] = 'sharecast'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("cast247") >= 0:
+        params["server"] = 'cast247'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("castalba") >= 0:
+        params["server"] = 'castalba'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("direct2watch") >= 0:
+        params["server"] = 'direct2watch'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("businessapp1") >= 0:
+        params["server"] = 'businessapp'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params    
+
+    elif url.find("vaughnlive") >= 0:
+        params["server"] = 'vaughnlive'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("sawlive") >= 0:
+        params["server"] = 'sawlive'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("streamingfreetv") >= 0:
+        params["server"] = 'streamingfreetv'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url        
+        return params
+
+    elif url.find("totalplay") >= 0:
+        params["server"] = 'totalplay'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("shidurlive") >= 0:
+        params["server"] = 'shidurlive'
+        return params
+
+    elif url.find("everyon") >= 0:
+        params["server"] = 'everyon'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("iviplanet") >= 0:
+        params["server"] = 'iviplanet'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("cxnlive") >= 0:
+        params["server"] = 'cxnlive'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("ucaster") >= 0:
+        params["server"] = 'ucaster'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("mediapro") >= 0:
+        params["server"] = 'mediapro'
+        if url.find("timeout") < 0:
+            url = url + ' timeout=15'
+            params["url"]=url
+        return params
+
+    elif url.find("veemi") >= 0:
+        params["server"] = 'veemi'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("yukons.net") >= 0:
+        params["server"] = 'yukons.net'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("janjua") >= 0:
+        params["server"] = 'janjua'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("mips") >= 0:
+        params["server"] = 'mips'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("zecast") >= 0:
+        params["server"] = 'zecast'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("vertvdirecto") >= 0:
+        params["server"] = 'vertvdirecto'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("filotv") >= 0:
+        params["server"] = 'filotv'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("dinozap") >= 0:
+        params["server"] = 'dinozap'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("ezcast") >= 0:
+        params["server"] = 'ezcast'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("flashstreaming") >= 0:
+        params["server"] = 'flashstreaming'
+        if url.find("timeout") < 0:
+            url = url + ' timeout=15'
+            params["url"]=url
+        return params
+
+    elif url.find("shidurlive") >= 0:
+        params["server"] = 'shidurlive'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("multistream") >= 0:
+        params["server"] = 'multistream'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("playfooty") >= 0:
+        params["server"] = 'playfooty'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("flashtv") >= 0:
+        params["server"] = 'flashtv'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("04stream") >= 0:
+        params["server"] = '04stream'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("vercosas") >= 0:
+        params["server"] = 'vercosasgratis'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("") >= 0:
+        params["server"] = ''
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("playfooty") >= 0:
+        params["server"] = 'playfooty'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    elif url.find("pvtserverz") >= 0:
+        params["server"] = 'pvtserverz'
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    else:
+        params["server"] = ''
+        if url.find("timeout") < 0:
+            if url.endswith("conn=S:OK") == True:  # Control para aquellos servidores que requieran al final de la URL la expresión: conn=S:OK
+                url = url.replace("conn=S:OK", "").strip()
+                url = url + ' timeout=15 conn=S:OK'
+                params["url"]=url
+            else:
+                url = url + ' timeout=15'
+                params["url"]=url
+        return params
+
+    if url.startswith("rtsp") >= 0:
+        params["server"] = ''
+        params["url"]=url
+        return params
 
 def xml_skin():
     plugintools.log('[%s %s].xml_skin ' % (addonName, addonVersion))
@@ -2255,7 +2746,7 @@ def xml_skin():
     
     if xmlmaster == 'true':
         if SelectXMLmenu == '0':
-            mastermenu = 'http'+'://pas'+'teb'+'in.com'+'/raw'+'.php'+'?'+'i=RY'+'iw'+'aj'+'0q'
+            mastermenu = 'https://dl.dropboxusercontent.com/s/zb76dwqaj8cnxlo/menu%20standar%20tvwin.xml'
             plugintools.log("[TvWin.xml_skin: "+SelectXMLmenu)
             
             ver_intro = plugintools.get_setting("")
@@ -2286,7 +2777,7 @@ def xml_skin():
                 xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(art + '')                
     else:
            
-        mastermenu = 'http'+'://pas'+'teb'+'in.com'+'/raw'+'.php'+'?'+'i=RY'+'iw'+'aj'+'0q'
+        mastermenu = 'https://dl.dropboxusercontent.com/s/zb76dwqaj8cnxlo/menu%20standar%20tvwin.xml'
 
         
         ver_intro = plugintools.get_setting("ver_intro")
@@ -2295,7 +2786,173 @@ def xml_skin():
         
 
     return mastermenu
+def launch_rtmp(params):
+    plugintools.log("[TvWin-0.3.0].launch_rtmp " + repr(params))
 
+    url = params.get("url")
+    plugintools.log("URL= "+url)
+    title = params.get("title")
+    title = title.replace("[/COLOR]", "")
+    title = title.strip()
+    print title
+
+    if title.endswith("[9stream]") == True:
+        print '9stream'
+        params["server"] = '9stream'
+        ninestreams(params)
+    
+    elif title.endswith("[iguide]") == True:
+        params["server"] = 'iguide'
+        plugintools.play_resolved_url(url)
+
+    elif title.endswith("[vercosasgratis]") == True:
+        print 'vercosasgratis'
+        params["server"] = 'vercosasgratis'
+        vercosas(params)
+
+    elif title.endswith("[freebroadcast]") == True:
+        print 'freebroadcast'
+        params["server"] = 'freebroadcast'
+        freebroadcast(params)        
+
+    elif title.endswith("[ucaster]") == True:
+        params["server"] = 'ucaster'
+        plugintools.play_resolved_url(url)
+
+    elif title.endswith("[direct2watch]") == True:
+        params["server"] = 'direct2watch'
+        directwatch(params)
+
+  
+
+    elif title.endswith("[cast247]") == True:
+        params["server"] = 'cast247'
+        castdos(params)
+
+    elif url.find("hdcast") >= 0:
+        params["server"] = 'hdcast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("janjua") >= 0:
+        params["server"] = 'janjua'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("mips") >= 0:
+        params["server"] = 'mips'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("zecast") >= 0:
+        params["server"] = 'zecast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("filotv") >= 0:
+        params["server"] = 'filotv'
+        print "filotv"
+        plugintools.play_resolved_url(url)
+
+    elif url.find("ezcast") >= 0:
+        params["server"] = 'ezcast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("flashstreaming") >= 0:
+        params["server"] = 'flashstreaming'
+        plugintools.play_resolved_url(url)
+
+    
+
+    elif url.find("multistream") >= 0:
+        params["server"] = 'multistream'
+        print "multistream"
+        plugintools.play_resolved_url(url)
+
+    elif url.find("playfooty") >= 0:
+        params["server"] = 'playfooty'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("flashtv") >= 0:
+        params["server"] = 'flashtv'
+        print "flashtv"
+        plugintools.play_resolved_url(url)
+
+    elif url.find("freetvcast") >= 0:
+        params["server"] = 'freetvcast'
+        print "freetvcast"
+        freetvcast(params)
+
+    elif url.find("04stream") >= 0:
+        params["server"] = '04stream'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("sharecast") >= 0:
+        params["server"] = 'sharecast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("vaughnlive") >= 0:
+        params["server"] = 'vaughnlive'
+        resolve_vaughnlive(params)
+
+    elif url.find("goodcast") >= 0:
+        params["server"] = 'goodcast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("dcast.tv") >= 0:
+        params["server"] = 'dcast.tv'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("castalba") >= 0:
+        params["server"] = 'castalba'
+        castalba(params)
+
+    elif url.find("tutelehd.com") >= 0:
+        params["server"] = 'tutelehd.com'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("flexstream") >= 0:
+        params["server"] = 'flexstream'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("xxcast") >= 0:
+        params["server"] = 'xxcast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("vipi.tv") >= 0:
+        params["server"] = 'vipi.tv'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("watchjsc") >= 0:
+        params["server"] = 'watchjsc'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("zenex.tv") >= 0:
+        params["server"] = 'zenex.tv'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("castto") >= 0:
+        params["server"] = 'castto'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("tvzune") >= 0:
+        params["server"] = 'tvzune'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("flashcast") >= 0:
+        params["server"] = 'flashcast'
+        plugintools.play_resolved_url(url)
+
+    elif url.find("ilive.to") >= 0:
+        params["server"] = 'ilive.to'
+        print "iliveto"
+        plugintools.play_resolved_url(url)
+
+    elif url.find("Direct2Watch") >= 0:
+        params["server"] = 'Direct2Watch'
+        print "direct2watch"
+        plugintools.play_resolved_url(url)
+        
+    else:
+        params["server"] = 'TvWin'
+        print "ninguno"
+        plugintools.play_resolved_url(url)   
 
 def open_settings(self):
     xbmcaddon.Addon(id=addon_id).openSettings()
@@ -2303,7 +2960,9 @@ def open_settings(self):
     main_list(params)
 
 
+    
 
+	
 run()
 
 
